@@ -1,0 +1,2 @@
+# Artificial_intellectual_disabilities
+Translation from 人工智障
