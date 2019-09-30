@@ -1,1 +1,8 @@
 .ipynb_checkpoints/
+ai_ch*
+*.dat
+*.csv
+*.zip
+*.otf
+*.txt
+data/
