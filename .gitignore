@@ -6,3 +6,6 @@ ai_ch*
 *.otf
 *.txt
 data/
+*.py~
+*.*\#
+__pycache__/
