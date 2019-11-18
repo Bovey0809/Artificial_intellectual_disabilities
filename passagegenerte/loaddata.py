@@ -6,8 +6,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # get batch
-
-
 def get_batch(dataset, n_seq, input_size):
     # words per batch
     batch_size = n_seq * input_size
@@ -27,13 +25,13 @@ def get_batch(dataset, n_seq, input_size):
         yield x, y
 
 
-def encodedtxt(txtfileaddress):
+def chardataloader(self, txtfileaddress):
     with open(txtfileaddress) as f:
         text = f.read()
-    chars = tuple(set(text))
-    int2char = dict(enumerate(chars))
-    char2int = {ch: ii for ii, ch in int2char.items()}
-    encoded = np.array([char2int[ch] for ch in text])
+    text = set(text)
+    int2char = dict(enumerate(text))
+    char2int = {char: ii for ii, char in int2char.items()}
 
 
-    
+class TxtDataset(Dataset):
+    def __init__()
