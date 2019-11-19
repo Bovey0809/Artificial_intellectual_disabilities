@@ -56,6 +56,7 @@ class CharRNN(nn.Module):
 
     def predict(self, char, h=None, top_k=None):
         # given a char predict next char
+
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         x = self.char2int[char]
