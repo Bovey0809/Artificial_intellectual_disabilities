@@ -36,7 +36,7 @@ class CharRNN(nn.Module):
         x, [h, c] = self.lstm(x, hc)
         x = self.dropout(x)
 
-        x = x.view(-1, self.hidden)
+        x = x.view(-1, self.n_hidden)
 
         x = self.fc(x)
 
@@ -51,8 +51,8 @@ class CharRNN(nn.Module):
                 weights.new(self.n_layers, n_seq, self.n_hidden))
 
     def initweight(self):
-        self.fc.bias.fill_(0)
-        self.fc.weight.uniform_(-1, 1)
+        self.fc.bias.data.fill_(0)
+        self.fc.weight.data.uniform_(-1, 1)
 
     def predict(self, char, h=None, top_k=None):
         # given a char predict next char

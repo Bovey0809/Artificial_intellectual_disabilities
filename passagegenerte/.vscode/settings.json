@@ -7,13 +7,17 @@
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": false,
     "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylintEnabled": true,
     "python.testing.unittestArgs": [
         "-v",
         "-s",
         ".",
         "-p",
         "*test.py"
+    ],
+    "python.linting.pylintArgs": [
+        "--errors-only",
+        "--generated-members=numpy.* ,torch.* ,cv2.* , cv.*"
     ]
 }
