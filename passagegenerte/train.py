@@ -4,7 +4,6 @@ from torch.nn import functional as F
 import numpy as np
 from model import CharRNN
 from utils import get_batches
-from torchsample.callbacks import EarlyStopping
 
 
 def train(net: CharRNN,
@@ -63,8 +62,7 @@ def train(net: CharRNN,
                     val_loss = criterion(output, targets.flatten()).item()
                     val_losses.append(val_loss)
                 batch_loss = np.mean(val_losses)
-                print(
-                    f"Epoch: {e+1:2d}, step: {counter:3d},loss: {loss:.4f} val_loss: {batch_loss:.4f}")
+                print(f"Epoch: {e+1: 2d},step: {counter: 3d},loss: {loss: .4f},val_loss: {batch_loss: .4f}")
 
                 if abs(val_losses[-1] - batch_loss) < 0.0001:
                     stop_counter += 1
@@ -92,7 +90,7 @@ if __name__ == "__main__":
     if 'net' in locals():
         del net
     # define and print the net
-    net = CharRNN(chars, n_hidden=128, n_layers=2)
+    net = CharRNN(chars, n_hidden=512, n_layers=2)
     print(net)
     n_seqs, n_steps = 256, 128
     # TRAIN
@@ -103,6 +101,6 @@ if __name__ == "__main__":
                   'n_layers': net.n_layers,
                   'state_dict': net.state_dict(),
                   'tokens': net.chars}
-    
+
     with open(log_file, 'wb') as f:
         torch.save(checkpoint, f)

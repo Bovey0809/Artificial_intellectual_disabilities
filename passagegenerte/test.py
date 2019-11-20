@@ -1,10 +1,9 @@
 import unittest
 import numpy as np
-import torch
+
 
 from model import CharRNN
 from train import train
-from utils import one_hot_encode, get_batches
 
 
 class Testgetbatch(unittest.TestCase):

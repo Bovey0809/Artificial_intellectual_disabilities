@@ -1,4 +1,4 @@
-import random
+import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -35,11 +35,8 @@ class CharRNN(nn.Module):
     def forward(self, x, hc):
         x, [h, c] = self.lstm(x, hc)
         x = self.dropout(x)
-
         x = x.view(-1, self.n_hidden)
-
         x = self.fc(x)
-
         return x, (h, c)
 
     def init_hidden(self, n_seq):
@@ -54,26 +51,26 @@ class CharRNN(nn.Module):
         self.fc.bias.data.fill_(0)
         self.fc.weight.data.uniform_(-1, 1)
 
-    def predict(self, char, h=None, top_k=None):
+    def predict(self, char, h=None, top_k=5):
         # given a char predict next char
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         x = self.char2int[char]
-        x = F.one_hot(torch.tensor(x, dtype=torch.long), self.n_labels)
-        # n_seq = 1
-
+        x = F.one_hot(torch.tensor(x), self.n_labels)
+        x = x.float().to(device)
         x = x.view(1, 1, self.n_labels)
-        x.to(device)
 
         hc = self.init_hidden(1)
+        hc = tuple([each.data.to(device) for each in hc])
         x, hc = self.forward(x, hc)
         p = F.softmax(x, dim=1)
         if top_k:
-            p, indexes = torch.topk(p, dim=1)
-            p, indexes = p.numpy().squeeze(), indexes.numpy().squeeze()
-            index = random.choices(indexes, p=p / p.sum())
+            p, indexes = torch.topk(p, top_k, dim=1)
+            p = p.cpu().detach().numpy().squeeze()
+            indexes = indexes.cpu().detach().numpy().squeeze()
+            index = np.random.choice(indexes, p=p/p.sum())
         else:
             index = p.argmax().item()
-        char = self.int2char[index.numpy().squeeze()]
+        char = self.int2char[index.squeeze()]
         return char, hc
