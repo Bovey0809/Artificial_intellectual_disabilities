@@ -9,3 +9,5 @@ data/
 *.py~
 *.*\#
 __pycache__/
+passagegenerte/charrnn.net
+passagegenerte/.vscode/settings.json

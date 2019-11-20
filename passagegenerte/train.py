@@ -79,7 +79,7 @@ def train(net: CharRNN,
 
 
 if __name__ == "__main__":
-    with open('data/anna.txt', 'r') as f:
+    with open('data/news_title.txt', 'r') as f:
         text = f.read()
     id2char = dict(enumerate(set(text)))
     char2id = {char: ii for ii, char in id2char.items()}
@@ -90,11 +90,11 @@ if __name__ == "__main__":
     if 'net' in locals():
         del net
     # define and print the net
-    net = CharRNN(chars, n_hidden=512, n_layers=2)
+    net = CharRNN(chars, n_hidden=512, n_layers=2, drop_prob=0.0)
     print(net)
     n_seqs, n_steps = 256, 128
     # TRAIN
-    train(net, encoded, epochs=1000, n_seqs=n_seqs,
+    train(net, encoded, epochs=100, n_seqs=n_seqs,
           n_steps=n_steps, lr=0.001, print_every=100)
     log_file = 'charrnn.net'
     checkpoint = {'n_hidden': net.n_hidden,
