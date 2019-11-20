@@ -73,6 +73,7 @@ def train(net: CharRNN,
                         early_stop = True
                         break
                     else:
+                        stop_counter -= 1
                         continue
         if early_stop:
             print("STOP")
@@ -93,7 +94,16 @@ if __name__ == "__main__":
     # define and print the net
     net = CharRNN(chars, n_hidden=128, n_layers=2)
     print(net)
-    n_seqs, n_steps = 128, 100
+    n_seqs, n_steps = 256, 128
     # TRAIN
-    train(net, encoded, epochs=100, n_seqs=n_seqs,
+    train(net, encoded, epochs=1000, n_seqs=n_seqs,
           n_steps=n_steps, lr=0.001, print_every=100)
+    log_file = 'charrnn.net'
+    checkpoint = {'n_hidden': net.n_hidden,
+                  'n_layers': net.n_layers,
+                  'state_dict': net.state_dict(),
+                  'tokens': net.chars}
+    
+    with open(log_file, 'wb') as f:
+        torch.save(checkpoint, f)
+        
