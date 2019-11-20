@@ -2,7 +2,6 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
-from utils import one_hot_encode
 
 
 class CharRNN(nn.Module):
@@ -57,7 +56,7 @@ class CharRNN(nn.Module):
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.to(device)
-        
+
         x = self.char2int[char]
         x = F.one_hot(torch.tensor(x), self.n_labels)
         x = x.float()
@@ -71,7 +70,7 @@ class CharRNN(nn.Module):
         if top_k:
             p, indexes = torch.topk(p, top_k, dim=1)
             indexes = indexes.numpy().squeeze()
-        
+
         p = p.numpy().squeeze()
         char = np.random.choice(indexes, p=p/p.sum())
         return self.int2char[char], hc

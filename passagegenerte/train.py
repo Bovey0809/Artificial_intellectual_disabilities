@@ -25,7 +25,7 @@ def train(net: CharRNN,
     val_idx = int(len(data)*(1-val_frac))
     train_data, val_data = data[:val_idx], data[val_idx:]
 
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
 
     net.to(device)
 
@@ -64,22 +64,24 @@ def train(net: CharRNN,
                 batch_loss = np.mean(val_losses)
                 print(f"Epoch: {e+1: 2d},step: {counter: 3d},loss: {loss: .4f},val_loss: {batch_loss: .4f}")
 
-                if abs(val_losses[-1] - batch_loss) < 0.0001:
+                if abs(val_losses[-1] - val_losses[-2]) < 0.0001:
                     stop_counter += 1
-                    if stop_counter >= stop_thres:
-                        print("Early Stopping")
-                        early_stop = True
-                        break
-                    else:
-                        stop_counter -= 1
-                        continue
+                else:
+                    stop_counter -= 1
+                if stop_counter >= stop_thres:
+                    print("Early Stopping")
+                    early_stop = True
+                    break
+                else:
+                    stop_counter -= 1
+                    continue
         if early_stop:
             print("STOP")
             break
 
 
 if __name__ == "__main__":
-    with open('data/news_title.txt', 'r') as f:
+    with open('data/news_desc.txt', 'r') as f:
         text = f.read()
     id2char = dict(enumerate(set(text)))
     char2id = {char: ii for ii, char in id2char.items()}
@@ -90,13 +92,13 @@ if __name__ == "__main__":
     if 'net' in locals():
         del net
     # define and print the net
-    net = CharRNN(chars, n_hidden=512, n_layers=2, drop_prob=0.0)
+    net = CharRNN(chars, n_hidden=64, n_layers=2, drop_prob=0.5)
     print(net)
     n_seqs, n_steps = 256, 128
     # TRAIN
     train(net, encoded, epochs=100, n_seqs=n_seqs,
           n_steps=n_steps, lr=0.001, print_every=100)
-    log_file = 'charrnn.net'
+    log_file = 'charrnn_desc.net'
     checkpoint = {'n_hidden': net.n_hidden,
                   'n_layers': net.n_layers,
                   'state_dict': net.state_dict(),

@@ -51,4 +51,4 @@ if __name__ == "__main__":
     loaded.load_state_dict(checkpoint['state_dict'])
     for _ in range(20):
         # the mean value of title is 22
-        print(sample(loaded, 22, cuda=True, top_k=5, prime="王涵柳"))
+        print(sample(loaded, 22, cuda=True, top_k=5, prime="中国"))
