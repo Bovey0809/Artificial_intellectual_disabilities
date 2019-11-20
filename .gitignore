@@ -10,6 +10,7 @@ data/
 *.*\#
 __pycache__/
 passagegenerte/charrnn.net
-passagegenerte/.vscode/settings.json
 .vscode/
 charrnn.net
+.pytest_cache/
+*.net
