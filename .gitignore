@@ -14,3 +14,4 @@ passagegenerte/charrnn.net
 charrnn.net
 .pytest_cache/
 *.net
+passagegenerte/.vscode/settings.json

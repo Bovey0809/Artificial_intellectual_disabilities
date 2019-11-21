@@ -20,5 +20,6 @@
         "--errors-only",
         "--generated-members=numpy.* ,torch.* ,cv2.* , cv.*"
     ],
-    "python.dataScience.jupyterServerURI": "http://133.9.48.76:8888/?token=bd5e0f83acde16eacaace615af659323c043aa738768aa99"
+    "python.dataScience.jupyterServerURI": "http://133.9.48.76:8888/?token=bd5e0f83acde16eacaace615af659323c043aa738768aa99",
+    "remote.SSH.useLocalServer": true
 }

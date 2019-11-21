@@ -1,8 +1,7 @@
 from __future__ import print_function, division
 import numpy as np
-from torch.utils.data import IterableDataset, DataLoader
+from torch.utils.data import IterableDataset
 import torch
-
 import torch.nn.functional as F
 import warnings
 warnings.filterwarnings('ignore')
@@ -11,13 +10,13 @@ warnings.filterwarnings('ignore')
 class TxtDataset(IterableDataset):
     def __init__(self, file_dir, batch_size, seq_len):
         super(TxtDataset).__init__
-        self.file_dir = file_dir
+        self.file_dir = file_dir        
         self.batch_size = batch_size
         self.seq_len = seq_len
         with open(self.file_dir) as f:
             self.text = f.read()
         self.n_labels = len(set(self.text))
-    
+
     # def __len__(self):
     #     return len(self.batch_size * self.seq_len)
 
