@@ -1,35 +1,43 @@
-import unittest
-import numpy as np
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
 
 
-from model import CharRNN
-from train import train
+def funcname(parameter_list):
+    pass
 
 
-class Testgetbatch(unittest.TestCase):
-    """test get_batch to iterate all the data without Error
+def init_weights(m):
+    classname = m.__class__.__name__
+    if classname.find('Linear') != -1 or classname.find('Bilinear') != -1:
+        nn.init.kaiming_uniform_(
+            a=2, mode='fan_in', nonlinearity='leaky_relu', tensor=m.weight)
+        if m.bias:
+            nn.init.zeros(tensor=m.bias)
 
-    """
+    elif classname.find('Conv') != -1:
+        nn.init.kaiming_uniform_(
+            a=2, mode='fan_in', nonlinearity='leaky_relu', tensor=m.weight)
+        if m.bias:
+            nn.init.zeros(tensor=m.bias)
 
-    def test_train(self):
-        with open('data/anna.txt', 'r') as f:
-            text = f.read()
-        id2char = dict(enumerate(set(text)))
-        char2id = {char: ii for ii, char in id2char.items()}
-        chars = tuple(set(text))
-        int2char = dict(enumerate(chars))
-        char2int = {ch: ii for ii, ch in int2char.items()}
-        encoded = np.array([char2int[ch] for ch in text])
-        if 'net' in locals():
-            del net
-        # define and print the net
-        net = CharRNN(chars, n_hidden=128, n_layers=1)
-        print(net)
-        n_seqs, n_steps = 128, 100
-        # TRAIN
-        train(net, encoded, epochs=1, n_seqs=n_seqs,
-              n_steps=n_steps, lr=0.001, cuda=True, print_every=10)
+    elif classname.find('BatchNorm') != -1 or classname.find('GroupNorm') != -1 or classname.find('LayerNorm') != -1:
+        nn.init.uniform_(a=0, b=1, tensor=m.weight)
+        nn.init.zeros(tensor=m.bias)
 
+    elif classname.find('Cell') != -1:
+        nn.init.xavier_uniform_(gain=1, tensor=m.weight_hh)
+        nn.init.xavier_uniform_(gain=1, tensor=m.weight_ih)
+        nn.init.ones_(tensor=m.bias_hh)
+        nn.init.ones_(tensor=m.bias_ih)
 
-if __name__ == "__main__":
-    unittest.main()
+    elif classname.find('RNN') != -1 or classname.find('LSTM') != -1 or classname.find('GRU') != -1:
+        for w in m.all_weights:
+            nn.init.xavier_uniform_(gain=1, tensor=w[2].data)
+            nn.init                                                                     
+            nn.init.ones_(tensor=w[0].data)
+            nn.init.ones_(tensor=w[1].data)
+
+    if classname.find('Embedding') != -1:
+        nn.init.kaiming_uniform_(
+            a=2, mode='fan_in', nonlinearity='leaky_relu', tensor=m.weight)
