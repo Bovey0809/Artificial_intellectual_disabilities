@@ -63,7 +63,7 @@ class Vocabulary(object):
 
     def add_word(self, word):
         """Add a token to the vocabulary."""
-        if not word in self.word2idx:
+        if word not in self.word2idx:
             self.word2idx[word] = self.idx
             self.idx2word[self.idx] = word
             self.idx += 1
@@ -87,7 +87,7 @@ class Vocabulary(object):
             self.add_word(word)
 
     def __call__(self, word):
-        if not word in self.word2idx:
+        if word not in self.word2idx:
             return self.word2idx[self.unk_word]
         return self.word2idx[word]
 

@@ -33,6 +33,7 @@ class DecoderRNN(nn.Module):
         self.lstm = nn.LSTM(embed_size, hidden_size,
                             num_layers, batch_first=True)
         self.embed = nn.Linear(vocab_size, embed_size)
+        self.embed2voc = nn.Linear(hidden_size, vocab_size)
 
     def forward(self, features, captions):
         batch_size = features.shape[0]
@@ -44,6 +45,7 @@ class DecoderRNN(nn.Module):
         hidden = [torch.randn([1, batch_size, self.hidden_size]),
                   torch.randn([1, batch_size, self.hidden_size])]
         out, hidden = self.lstm(inputs, hidden)
+        out = self.embed2voc(out[:, 1:, :])
         return out
 
     def sample(self, inputs, states=None, max_len=20):
