@@ -18,3 +18,7 @@ passagegenerte/.vscode/settings.json
 .vscode/settings.json
 vocab.pkl
 hmm-tagger
+.vscode/settings.json
+image_caption/tox.ini
+image_caption/.env
+.vscode/

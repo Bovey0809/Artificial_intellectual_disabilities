@@ -1,17 +1,16 @@
-from torchvision import transforms
-from data_loader import get_loader
-import nltk
-from pycocotools.coco import COCO
+import torch
 import sys
+import torch.utils.data as data
+import nltk
+from torchvision import transforms
+
+from model import EncoderCNN, DecoderRNN
+from data_loader import get_loader
 sys.path.append('~/cocoapi/PythonAPI')
 nltk.download('punkt')
-import numpy as np
-import torch.utils.data as data
-from model import EncoderCNN, DecoderRNN
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+torch.set_default_tensor_type(torch.cuda.FloatTensor)
 
 transform_train = transforms.Compose([
     transforms.Resize(256),
@@ -37,7 +36,7 @@ new_sampler = data.SubsetRandomSampler(indices=indices)
 data_loader.batch_sampler.sampler = new_sampler
 images, captions = next(iter(data_loader))
 
-device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+
 embed_size = 256
 encoder = EncoderCNN(embed_size)
 encoder.to(device)
@@ -48,7 +47,6 @@ print(features.shape)
 # Specify the number of features in the hidden state of the RNN decoder.
 hidden_size = 512
 
-#-#-#-# Do NOT modify the code below this line. #-#-#-#
 
 # Store the size of the vocabulary.
 vocab_size = len(data_loader.dataset.vocab)

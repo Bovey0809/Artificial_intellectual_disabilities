@@ -14,7 +14,9 @@
         "passagegenerte"
     ],
     "python.testing.promptToConfigure": false,
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.dataScience.jupyterServerURI": "http://133.9.48.76:8888/lab?",
+    "python.linting.flake8Enabled": true,
+    "python.envFile": "${workspaceRoot}/.env",
 }
