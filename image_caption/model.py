@@ -23,7 +23,7 @@ class EncoderCNN(nn.Module):
 
 
 class DecoderRNN(nn.Module):
-    def __init__(self, embed_size, hidden_size, vocab_size, num_layers=1):
+    def __init__(self, embed_size, hidden_size, vocab_size, num_layers=2):
         super().__init__()
         self.embed_size = embed_size
         self.hidden_size = hidden_size
@@ -42,8 +42,8 @@ class DecoderRNN(nn.Module):
         captions = self.embed(captions.to(torch.float))
 
         inputs = torch.cat((featuers, captions), dim=1)
-        hidden = [torch.randn([1, batch_size, self.hidden_size]),
-                  torch.randn([1, batch_size, self.hidden_size])]
+        hidden = [torch.randn([self.num_layers, batch_size, self.hidden_size]),
+                  torch.randn([self.num_layers, batch_size, self.hidden_size])]
         out, hidden = self.lstm(inputs, hidden)
         out = self.embed2voc(out[:, 1:, :])
         return out

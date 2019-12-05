@@ -1,15 +1,11 @@
-import time
-import requests
 import os
 import numpy as np
 import torch.utils.data as data
 from model import EncoderCNN, DecoderRNN
 from data_loader import get_loader
-from pycocotools.coco import COCO
 from torchvision import transforms
 import math
 import torch.optim as optim
-import torch.nn.functional as F
 import torch.nn as nn
 import torch
 import sys
@@ -21,11 +17,11 @@ vocab_threshold = 5
 vocab_from_file = True
 embed_size = 512
 hidden_size = 512
-num_epochs = 3
-save_every = 100
+num_epochs = 10
+save_every = 1
 print_every = 100          # determines window for printing average loss
 log_file = 'training_log.txt'       # name of file with saved training loss and perplexity
-
+model_name = f"{batch_size}-{embed_size}-{hidden_size}"
 # (Optional) TODO #2: Amend the image transform below.
 transform_train = transforms.Compose([
     transforms.Resize(256),                          # smaller edge of image resized to 256
@@ -62,7 +58,7 @@ params = [{'params': encoder.parameters()},
           {'params': decoder.parameters()}]
 
 # TODO #4: Define the optimizer.
-optimizer = torch.optim.Adadelta(params, lr=1e-2)
+optimizer = optim.Adadelta(params, lr=1e-2)
 
 # Set the total number of training steps per epoch.
 total_step = math.ceil(len(data_loader.dataset.caption_lengths) / data_loader.batch_sampler.batch_size)
@@ -122,9 +118,10 @@ for epoch in range(1, num_epochs+1):
             print('\r' + stats)
 
     # Save the weights.
-    if epoch % save_every == 0:
-        torch.save(decoder.state_dict(), os.path.join('./models', 'decoder-%d.pkl' % epoch))
-        torch.save(encoder.state_dict(), os.path.join('./models', 'encoder-%d.pkl' % epoch))
+    if epoch % save_every == 1:
+        torch.save(decoder.state_dict(), os.path.join('./models', f'{model_name}-decoder-{epoch}.pkl'))
+        torch.save(encoder.state_dict(), os.path.join('./models', f'{model_name}-encoder-{epoch}.pkl'))
+        print('File saved')
 
 # Close the training log file.
 f.close()
