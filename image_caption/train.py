@@ -46,7 +46,7 @@ encoder = EncoderCNN(embed_size)
 decoder = DecoderRNN(embed_size, hidden_size, vocab_size)
 
 # Move models to GPU if CUDA is available.
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 encoder.to(device)
 decoder.to(device)
 
@@ -58,7 +58,7 @@ params = [{'params': encoder.parameters()},
           {'params': decoder.parameters()}]
 
 # TODO #4: Define the optimizer.
-optimizer = optim.Adadelta(params, lr=1e-2)
+optimizer = optim.Adam(params)
 
 # Set the total number of training steps per epoch.
 total_step = math.ceil(len(data_loader.dataset.caption_lengths) / data_loader.batch_sampler.batch_size)
@@ -118,7 +118,7 @@ for epoch in range(1, num_epochs+1):
             print('\r' + stats)
 
     # Save the weights.
-    if epoch % save_every == 1:
+    if epoch % save_every == 0:
         torch.save(decoder.state_dict(), os.path.join('./models', f'{model_name}-decoder-{epoch}.pkl'))
         torch.save(encoder.state_dict(), os.path.join('./models', f'{model_name}-encoder-{epoch}.pkl'))
         print('File saved')

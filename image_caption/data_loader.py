@@ -8,7 +8,7 @@ from pycocotools.coco import COCO
 import numpy as np
 from tqdm import tqdm
 import json
-
+import cv2
 
 def get_loader(transform,
                mode='train',
@@ -127,6 +127,7 @@ class CoCoDataset(data.Dataset):
             path = self.coco.loadImgs(img_id)[0]['file_name']
 
             # Convert image to tensor and pre-process using transform
+            cv2.imread
             image = Image.open(os.path.join(
                 self.img_folder, path)).convert('RGB')
             image = self.transform(image)

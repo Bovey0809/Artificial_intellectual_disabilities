@@ -1,5 +1,10 @@
 # %%
+import sys
+sys.path.append(
+    '/home/houbowei/Artificial_intellectual_disabilities/image_caption')
+sys.path.append('~/cocoapi/PythonAPI')
 from model import EncoderCNN, DecoderRNN
+
 import os
 import torch
 from data_loader import get_loader
@@ -7,10 +12,7 @@ from torchvision import transforms
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-sys.path.append(
-    '/home/houbowei/Artificial_intellectual_disabilities/image_caption')
-sys.path.append('~/cocoapi/PythonAPI')
+
 
 transform_test = transforms.Compose([
     transforms.Resize(256),
@@ -29,10 +31,10 @@ plt.title('example image')
 plt.show()
 
 # %%
-device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
 
-encoder_file = './models/encoder-3.pkl'
-decoder_file = './models/decoder-3.pkl'
+encoder_file = './models/256-512-512-encoder-1.pkl'
+decoder_file = './models/256-512-512-decoder-1.pkl'
 
 embed_size = 512
 hidden_size = 512
