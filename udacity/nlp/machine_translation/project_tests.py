@@ -4,7 +4,7 @@ from keras.models import Sequential
 from keras.preprocessing.text import Tokenizer
 from keras.utils import to_categorical
 
-
+    
 def _test_model(model, input_shape, output_sequence_length, french_vocab_size):
     if isinstance(model, Sequential):
         model = model.model
